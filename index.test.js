@@ -1,4 +1,6 @@
 const pawn = require("./index");
+const solution = require("./system/solution");
+const { getRandomInt } = require("./system/environment");
 
 test('Функция должна вернуть булиновое значение', () => {
 	const type = typeof pawn(6, 4, 7, 5);
@@ -40,4 +42,26 @@ test('Тест. x1: 2, y1: 3, x2: 2, y2: 4', () => {
 	const res = pawn(2, 3, 2, 4);
 
 	expect(res).toBe(false);
+});
+
+test('Auto: random outcomes', () => {
+	let failed = false;
+
+	for (let i = 0; i < 100; i++) {
+		const randX1 = getRandomInt(1, 8);
+		const randY1 = getRandomInt(1, 8);
+		const randX2 = getRandomInt(1, 8);
+		const randY2 = getRandomInt(1, 8);
+
+		if (randX1 === randX2 && randY1 === randY2) {
+			continue;
+		}
+
+		if (solution(randX1, randY1, randX2, randY2) !== pawn(randX1, randY1, randX2, randY2)) {
+			failed = 'failed';
+			break;
+		}
+	}
+
+	expect(failed).not.toBe('failed');
 });
